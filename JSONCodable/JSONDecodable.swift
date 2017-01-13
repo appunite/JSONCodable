@@ -277,4 +277,38 @@ public class JSONDecoder {
         }
         return result
     }
+    
+    // [JSONTransformable]
+    public func decode<EncodedType, DecodedType>(key: String, transformer: JSONTransformer<EncodedType, DecodedType>) throws -> [DecodedType] {
+        guard let value = get(key) else {
+            throw JSONDecodableError.MissingTypeError(key: key)
+        }
+        guard let actual = value as? [EncodedType] else {
+            throw JSONDecodableError.IncompatibleTypeError(key: key, elementType: value.dynamicType, expectedType: EncodedType.self)
+        }
+        var result: [DecodedType] = []
+        for actualElement in actual {
+            guard let resultElement = try? transformer.decoding(actualElement) else {continue}
+            guard let unwrappedResultElement = resultElement else {continue}
+            result.append(unwrappedResultElement)
+        }
+        return result
+    }
+    
+    // [JSONTransformable]?
+    public func decode<EncodedType, DecodedType>(key: String, transformer: JSONTransformer<EncodedType, DecodedType>) throws -> [DecodedType]? {
+        guard let value = get(key) else {
+            return nil
+        }
+        guard let actual = value as? [EncodedType] else {
+            throw JSONDecodableError.IncompatibleTypeError(key: key, elementType: value.dynamicType, expectedType: EncodedType.self)
+        }
+        var result: [DecodedType] = []
+        for actualElement in actual {
+            guard let resultElement = try? transformer.decoding(actualElement) else {continue}
+            guard let unwrappedResultElement = resultElement else {continue}
+            result.append(unwrappedResultElement)
+        }
+        return result
+    }
 }
