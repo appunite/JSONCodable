@@ -397,10 +397,10 @@ public class JSONDecoder {
     // [JSONTransformable]
     public func decode<EncodedType, DecodedType>(key: String, transformer: JSONTransformer<EncodedType, DecodedType>) throws -> [DecodedType] {
         guard let value = get(key) else {
-            throw JSONDecodableError.MissingTypeError(key: key)
+            throw JSONDecodableError.missingTypeError(key: key)
         }
         guard let actual = value as? [EncodedType] else {
-            throw JSONDecodableError.IncompatibleTypeError(key: key, elementType: value.dynamicType, expectedType: EncodedType.self)
+            throw JSONDecodableError.incompatibleTypeError(key: key, elementType: type(of: value), expectedType: EncodedType.self)
         }
         var result: [DecodedType] = []
         for actualElement in actual {
@@ -417,7 +417,7 @@ public class JSONDecoder {
             return nil
         }
         guard let actual = value as? [EncodedType] else {
-            throw JSONDecodableError.IncompatibleTypeError(key: key, elementType: value.dynamicType, expectedType: EncodedType.self)
+            throw JSONDecodableError.incompatibleTypeError(key: key, elementType: type(of: value), expectedType: EncodedType.self)
         }
         var result: [DecodedType] = []
         for actualElement in actual {
