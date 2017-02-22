@@ -395,7 +395,7 @@ public class JSONDecoder {
     }
     
     // [JSONTransformable]
-    public func decode<EncodedType, DecodedType>(key: String, transformer: JSONTransformer<EncodedType, DecodedType>) throws -> [DecodedType] {
+    public func decode<EncodedType, DecodedType>(_ key: String, transformer: JSONTransformer<EncodedType, DecodedType>) throws -> [DecodedType] {
         guard let value = get(key) else {
             throw JSONDecodableError.missingTypeError(key: key)
         }
@@ -412,7 +412,7 @@ public class JSONDecoder {
     }
     
     // [JSONTransformable]?
-    public func decode<EncodedType, DecodedType>(key: String, transformer: JSONTransformer<EncodedType, DecodedType>) throws -> [DecodedType]? {
+    public func decode<EncodedType, DecodedType>(_ key: String, transformer: JSONTransformer<EncodedType, DecodedType>) throws -> [DecodedType]? {
         guard let value = get(key) else {
             return nil
         }
